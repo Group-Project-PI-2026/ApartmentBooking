@@ -1,6 +1,52 @@
-@ApartmentBooking_HostAddress = http://localhost:5278
+@host = http://localhost:5278
+# Access token from Keycloak (realm "apartment-booking"), e.g. obtained via the SPA or a direct grant.
+@token = paste-access-token-here
 
-GET {{ApartmentBooking_HostAddress}}/weatherforecast/
-Accept: application/json
+### Districts
+GET {{host}}/api/apartments/districts
 
-###
+### Search
+GET {{host}}/api/apartments?districtId=6&checkIn=2026-12-20&checkOut=2026-12-23&guestsCount=2
+
+### Reserve (15-minute lock + Stripe Checkout URL)
+POST {{host}}/api/bookings/reserve
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "apartmentId": "00000000-0000-0000-0000-000000000000",
+  "checkIn": "2026-12-20",
+  "checkOut": "2026-12-23",
+  "guestsCount": 2,
+  "payInFull": false
+}
+
+### My bookings
+GET {{host}}/api/bookings/my?status=Future
+Authorization: Bearer {{token}}
+
+### Owner request
+POST {{host}}/api/owner-requests
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "contactName": "Іван Петренко",
+  "contactEmail": "owner@example.com",
+  "contactPhone": "+380501234567",
+  "districtId": 7,
+  "address": "вул. Сагайдачного, 1",
+  "title": "Квартира на Подолі",
+  "description": "Дві кімнати, ремонт 2024 року",
+  "maxGuests": 4,
+  "expectedPricePerNight": 2500,
+  "photoUrls": [],
+  "amenities": ["Wi-Fi"]
+}
+
+### Manager: list owner requests
+GET {{host}}/api/management/owner-requests?status=New&page=1&pageSize=20
+Authorization: Bearer {{token}}
+
+### Health
+GET {{host}}/health
