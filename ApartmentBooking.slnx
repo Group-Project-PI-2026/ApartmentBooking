@@ -3,4 +3,5 @@
   <Project Path="ApartmentBookingApplication/ApartmentBookingApplication.csproj" />
   <Project Path="ApartmentBookingDomain/ApartmentBookingDomain.csproj" />
   <Project Path="ApartmentBookingInfrastructure/ApartmentBookingInfrastructure.csproj" />
+  <Project Path="ApartmentBooking.Tests/ApartmentBooking.Tests.csproj" />
 </Solution>
