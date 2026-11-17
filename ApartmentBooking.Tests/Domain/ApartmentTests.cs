@@ -31,6 +31,8 @@ public class ApartmentTests
 
     [Fact]
     [Trait("Requirement", "Positive nightly price")]
+    [Trait("Category", "KnownBug")]
+    [Trait("Bug", "BUG-BE-001")]
     public void Constructor_WithZeroNightlyPrice_ThrowsDomainException()
     {
         Assert.Throws<DomainException>(() => CreateApartment(pricePerNight: 0m));

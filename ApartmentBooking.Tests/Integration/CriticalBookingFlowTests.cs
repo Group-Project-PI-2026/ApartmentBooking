@@ -117,6 +117,8 @@ public class CriticalBookingFlowTests
 
     [PostgresFact]
     [Trait("Risk", "Concurrent owner request decision")]
+    [Trait("Category", "KnownBug")]
+    [Trait("Bug", "BUG-BE-006")]
     public async Task ConcurrentOwnerApprovals_CreateAtMostOneApartment()
     {
         await using var environment = await PostgresTestEnvironment.StartAsync();

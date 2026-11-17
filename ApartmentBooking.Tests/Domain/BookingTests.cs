@@ -39,6 +39,8 @@ public class BookingTests
 
     [Fact]
     [Trait("Requirement", "Payment amount integrity")]
+    [Trait("Category", "KnownBug")]
+    [Trait("Bug", "BUG-BE-002")]
     public void RegisterPayment_WhenAmountExceedsBalance_ThrowsDomainException()
     {
         var booking = CreateBooking(totalPrice: 1_000m, initialPayment: 300m);
