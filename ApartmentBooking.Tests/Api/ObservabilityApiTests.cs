@@ -24,11 +24,11 @@ public class ObservabilityApiTests(ApiFactory api)
     public async Task CorrelationId_FromRequest_IsEchoedInResponse()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/api/apartments/districts");
-        request.Headers.Add(Header, "qa-zinchenko-001");
+        request.Headers.Add(Header, "qa-test-001");
 
         var response = await api.ClientFor(null).SendAsync(request);
 
-        Assert.Equal("qa-zinchenko-001", response.Headers.GetValues(Header).Single());
+        Assert.Equal("qa-test-001", response.Headers.GetValues(Header).Single());
     }
 
     [ApiFact]

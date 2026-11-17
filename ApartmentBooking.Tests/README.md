@@ -17,7 +17,7 @@ dotnet test ApartmentBooking.Tests\ApartmentBooking.Tests.csproj --configuration
 
 Do not replace PostgreSQL with EF InMemory for these tests. The production implementation depends on transactions, `SELECT ... FOR UPDATE`, `ExecuteDeleteAsync`, `xmin`, and database uniqueness constraints.
 
-## API integration and E2E tests (QA: Zinchenko)
+## API integration and E2E tests (QA: Kashyrets)
 
 | Folder | Level | What it covers |
 | --- | --- | --- |
