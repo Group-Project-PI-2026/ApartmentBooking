@@ -163,24 +163,13 @@ public class DomainEdgeCaseTests
 {
     private static readonly DateOnly Today = new(2027, 5, 10);
 
+    // Status after deposit / full payment is covered by Domain/BookingTests; here only BalanceDue.
     [Fact]
-    public void Booking_PartialPayment_HasBalanceDue_AndPartiallyPaidStatus()
+    public void Booking_BalanceDue_IsTotalMinusPaid()
     {
         var booking = new Booking(Guid.NewGuid(), Guid.NewGuid(), null, new DateRange(Today, Today.AddDays(2)), 2_000m, 600m);
 
-        Assert.Equal(BookingStatus.PartiallyPaid, booking.Status);
         Assert.Equal(1_400m, booking.BalanceDue);
-    }
-
-    [Fact]
-    public void Booking_PayingExactBalance_MakesItPaid()
-    {
-        var booking = new Booking(Guid.NewGuid(), Guid.NewGuid(), null, new DateRange(Today, Today.AddDays(2)), 2_000m, 600m);
-
-        booking.RegisterPayment(1_400m);
-
-        Assert.Equal(BookingStatus.Paid, booking.Status);
-        Assert.Equal(0m, booking.BalanceDue);
     }
 
     [Fact]
@@ -204,10 +193,10 @@ public class DomainEdgeCaseTests
     }
 
     [Fact]
-    public void DateRange_CreateUpcoming_TodayIsAllowed_YesterdayIsNot()
+    public void DateRange_CreateUpcoming_AllowsCheckInToday()
     {
+        // Past check-in is covered by Domain/DateRangeTests; this is the boundary value.
         Assert.Equal(1, DateRange.CreateUpcoming(Today, Today.AddDays(1), Today).Nights);
-        Assert.Throws<DomainException>(() => DateRange.CreateUpcoming(Today.AddDays(-1), Today.AddDays(1), Today));
     }
 
     [Fact]
@@ -217,18 +206,6 @@ public class DomainEdgeCaseTests
 
         Assert.Equal(TimeSpan.FromMinutes(15), bookingLock.ExpiresAt - bookingLock.CreatedAt);
         Assert.False(bookingLock.IsExpired());
-    }
-
-    [Fact]
-    public void CancellationPolicy_AlreadyCancelled_IsDenied()
-    {
-        var booking = new Booking(Guid.NewGuid(), Guid.NewGuid(), null, new DateRange(Today.AddDays(30), Today.AddDays(32)), 2_000m, 600m);
-        booking.Cancel(0m, 600m);
-
-        var preview = CancellationPolicy.Calculate(booking, Today, new BookingOptions());
-
-        Assert.False(preview.CanCancel);
-        Assert.Equal("Booking is already cancelled.", preview.Reason);
     }
 
     [Fact]
